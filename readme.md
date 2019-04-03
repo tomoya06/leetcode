@@ -1,0 +1,1 @@
+> My Leetcode solution. Deal with Java or Python. 
