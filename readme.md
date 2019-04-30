@@ -1,12 +1,12 @@
 # TOMOYA's LEETCODE SOLUTION
 
-~~ My Leetcode solution. Deal with Java or Python. ~~
+~~My Leetcode solution. Deal with Java or Python.~~
 
-~~ My Leetcode solution. Deal with Python is fine. ~~
+~~My Leetcode solution. Deal with Python is fine.~~
 
 > My LeetCode Solutions. Deal with Java :)
 
-~~ 从困难开始刷，中间有需要用到在中低难度的基础算法再回头看看。 ~~
+~~从困难开始刷，中间有需要用到在中低难度的基础算法再回头看看。~~
 
 放屁，还是从头开始刷吧。
 
