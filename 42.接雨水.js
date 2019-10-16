@@ -33,6 +33,22 @@
  * @return {number}
  */
 var trap = function (height) {
+  if (height.length <= 2) return 0;
+  let barrel = 0;
+  const size = height.length;
+  const leftMaxs = new Array(size), rightMaxs = new Array(size);
+  leftMaxs[0] = height[0];
+  for (let i = 1; i < size; i += 1) {
+    leftMaxs[i] = Math.max(leftMaxs[i-1], height[i]);
+  }
+  rightMaxs[size-1] = height[size-1];
+  for (let i = size-2; i >= 0; i -= 1) {
+    rightMaxs[i] = Math.max(rightMaxs[i+1], height[i]);
+  }
+  for (let i = 1; i < size-1; i += 1) {
+    barrel += Math.min(leftMaxs[i], rightMaxs[i]) - height[i];
+  }
+  return barrel;
 };
 // @lc code=end
 
