@@ -56,7 +56,14 @@
  * @param {number[]} nums
  * @return {number}
  */
-var removeDuplicates = function(nums) {
-    
+var removeDuplicates = function (nums) {
+  let i = nums.length - 1;
+  while (i >= 2) {
+    if (nums[i] === nums[i-1] && nums[i] === nums[i-2]) {
+      nums.splice(i, 1);
+    }
+    i -= 1;
+  }
+  return nums.length;
 };
 
