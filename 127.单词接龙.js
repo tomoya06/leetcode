@@ -67,9 +67,11 @@
 var ladderLength = function (beginWord, endWord, wordList) {
   const N = beginWord.length;
 
+  if (!wordList.includes(endWord)) return 0;
+
   const graph = buildgraph();
   const result = bfs(graph);
-  return result ? result.length : -1;
+  return result;
 
   /**
    * 
@@ -94,40 +96,43 @@ var ladderLength = function (beginWord, endWord, wordList) {
       const leaves = wordList.filter(anoWord => calcDelta(word, anoWord) === 1);
       graph.set(word, leaves);
     })
+    graph.set(beginWord, wordList.filter(anoWord => calcDelta(beginWord, anoWord) === 1));
     return graph;
   }
 
   /**
    * 
    * @param {Map<string, string[]>} graph 
-   * @return {string[]}
+   * @return {number}
    */
   function bfs(graph) {
     const unvisitedWord = new Set(wordList.slice(0));
-    let queue = [[beginWord]];
-    unvisitedWord.delete(beginWord);
+    let queue = [beginWord];
+    let minLength = 1;
 
-    while (unvisitedWord.size > 0) {
-      queue.forEach(route => {
-        if (route.includes(endWord)) {
-          return route;
-        }
-      })
+    while (true) {
+      if (queue.includes(endWord)) {
+        break;
+      }
+      if (unvisitedWord.size === 0 || queue.length === 0) {
+        minLength = 0;
+        break;
+      }
       const newQueue = [];
-      queue.forEach(route => {
-        const lastNodeInRoute = route[route.length - 1];
-        unvisitedWord.delete(lastNodeInRoute);
+      queue.forEach(node => unvisitedWord.delete(node));
+      queue.forEach(lastNodeInRoute => {
         const nextNodes = graph.get(lastNodeInRoute);
         nextNodes.forEach(node => {
           if (unvisitedWord.has(node)) {
-            newQueue.push([...route, node]);
+            newQueue.push(node);
           }
         })
       });
       queue = newQueue;
+      minLength += 1;
     }
 
-    return null;
+    return minLength;
   }
 };
 // @lc code=end
