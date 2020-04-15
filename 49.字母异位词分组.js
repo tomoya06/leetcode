@@ -14,9 +14,9 @@
  * Testcase Example:  '["eat","tea","tan","ate","nat","bat"]'
  *
  * 给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
- * 
+ *
  * 示例:
- * 
+ *
  * 输入: ["eat", "tea", "tan", "ate", "nat", "bat"],
  * 输出:
  * [
@@ -24,20 +24,28 @@
  * ⁠ ["nat","tan"],
  * ⁠ ["bat"]
  * ]
- * 
+ *
  * 说明：
- * 
- * 
+ *
+ *
  * 所有输入均为小写字母。
  * 不考虑答案输出的顺序。
- * 
- * 
+ *
+ *
  */
 /**
  * @param {string[]} strs
  * @return {string[][]}
  */
-var groupAnagrams = function(strs) {
-    
+var groupAnagrams = function (strs) {
+  result = {}
+  for (let str of strs) {
+    const strkey = str.split("").sort().join("");
+    if (result[strkey]) {
+      result[strkey].push(str);
+    } else {
+      result[strkey] = [str];
+    }
+  }
+  return Object.keys(result).map(key => result[key]);
 };
-
