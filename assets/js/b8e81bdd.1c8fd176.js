@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[4501],{2384:function(s){s.exports=JSON.parse('{"allTagsPath":"/leetcode/blog/tags","slug":"/leetcode/blog/tags/docusaurus","name":"docusaurus","count":4,"permalink":"/leetcode/blog/tags/docusaurus"}')}}]);

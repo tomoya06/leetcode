@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[5526],{4289:function(e){e.exports=JSON.parse('{"allTagsPath":"/leetcode/blog/tags","slug":"/leetcode/blog/tags/hello","name":"hello","count":2,"permalink":"/leetcode/blog/tags/hello"}')}}]);
