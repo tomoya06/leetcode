@@ -1,0 +1,125 @@
+---
+tags:
+  - 树
+  - 深度优先搜索
+  - 广度优先搜索
+  - 设计
+  - 字符串
+  - 二叉树
+  - 剑指offer专项版
+id: leetcode_OfferII048
+title: 🔴 剑指 Offer II 048. 序列化与反序列化二叉树
+ques_id: OfferII048
+platform: leetcode
+online_link: https://leetcode-cn.com/problems/h54YBf/
+online_name: 序列化与反序列化二叉树
+level: h
+---
+
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+    {children}
+  </span>
+);
+
+:::tip LeetCode 提示
+
+题目难度 <Highlight color="#ff375f">困难</Highlight>
+
+原题链接 [🔗 leetcode](https://leetcode-cn.com/problems/h54YBf/)
+
+:::
+
+## 题解1
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        List<String> outlist = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        if (root == null) {
+            return "";
+        }
+        
+        while (!queue.isEmpty()) {
+            var head = queue.poll();
+
+            if (head == null) {
+                outlist.add("null");
+            } else {
+                outlist.add(Integer.toString(head.val));
+                queue.offer(head.left);
+                queue.offer(head.right);
+            }
+        }
+
+        return String.join(",", outlist);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.equals("")) {
+            return null;
+        }
+
+        String[] vals = data.split(",");
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        TreeNode head = genFromStr(vals[0]), cur;
+        queue.offer(head);
+
+        int n = vals.length, i=0;
+        while (!queue.isEmpty()) {
+            cur = queue.poll();
+            if (i+1<n) {
+                TreeNode leftNode = genFromStr(vals[++i]);
+                cur.left = leftNode;
+                if (leftNode != null) {
+                    queue.offer(leftNode);
+                }
+            }
+            if (i+1<n) {
+                TreeNode rightNode = genFromStr(vals[++i]);
+                cur.right = rightNode;
+                if (rightNode != null) {
+                    queue.offer(rightNode);
+                }
+            }
+        }
+
+        return head;
+    }
+
+    private TreeNode genFromStr(String val) {
+        if (val.equals("null")) {
+            return null;
+        }
+
+        return new TreeNode(Integer.valueOf(val));
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
+```

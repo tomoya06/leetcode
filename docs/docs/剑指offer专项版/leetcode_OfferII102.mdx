@@ -1,0 +1,116 @@
+---
+tags:
+  - 数组
+  - 动态规划
+  - 回溯
+  - 剑指offer专项版
+id: leetcode_OfferII102
+title: 🟡 剑指 Offer II 102. 加减的目标值
+ques_id: OfferII102
+platform: leetcode
+online_link: https://leetcode-cn.com/problems/YaVDxD/
+online_name: 加减的目标值
+level: m
+---
+
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+    {children}
+  </span>
+);
+
+:::tip LeetCode 提示
+
+题目难度 <Highlight color="#ffc01e">中等</Highlight>
+
+原题链接 [🔗 leetcode](https://leetcode-cn.com/problems/YaVDxD/)
+
+:::
+
+## 题解1
+
+
+抄答案
+
+dp的切入点在于这条转换公式： 
+
+```java
+pos - neg = target
+// ==> 
+(sum - neg) - neg = target
+// -->
+neg = (sum - target) / 2
+```
+
+因此把 O(2^n) 的问题转换成了：前n个数取出哪些可以凑成和为 neg 的题目
+
+
+```java
+class Solution {
+    public int findTargetSumWays(int[] nums, int target) {
+        int n = nums.length;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        int neg2 = sum-target;
+        if (neg2 < 0 || neg2%2 != 0) {
+            return 0;
+        }
+        int neg = neg2 / 2;
+
+        int[][] dp = new int[n+1][neg+1];
+        
+        dp[0][0] = 1;
+
+        for (int i=1; i<=n; i++) {
+            int num = nums[i-1];
+            for (int j=0; j<=neg; j++) {
+                if (num > j) {
+                    dp[i][j] = dp[i-1][j];
+                } else {
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-num];
+                }
+            }
+        }
+
+        return dp[n][neg];
+    }
+}
+```
+
+节省空间版
+
+```java
+class Solution {
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+
+        int neg2 = sum - target;
+        if (neg2 < 0 || neg2 % 2 != 0) {
+            return 0;
+        }
+
+        int n = nums.length, neg = neg2/2;
+        int[] dp = new int[neg+1];
+        dp[0] = 1;
+        for (int i=0; i<n; i++) {
+            int num = nums[i];
+            for (int j=neg; j>=num; j--) {
+                dp[j] += dp[j-num];
+            }
+        }
+
+        return dp[neg];
+    }
+}
+```
