@@ -108,7 +108,7 @@ def process_leetcode_online():
   ques = fetch_ques_meta(ques_id)
   ques = parse_meta(ques)
   
-  category = input('设置目录：（剑指offer专项版）') or '剑指offer专项版'
+  category = input('设置目录：（每日一题）') or '每日一题'
   
   target_filename = f"{ques['platform']}_{ques['id']}.mdx"
   target_dir = f"docs/docs/{category}"

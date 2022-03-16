@@ -1,0 +1,152 @@
+---
+tags:
+  - 设计
+  - 哈希表
+  - 链表
+  - 双向链表
+  - 每日一题
+id: leetcode_432
+title: 🔴 432. 全 O(1) 的数据结构
+ques_id: 432
+platform: leetcode
+online_link: https://leetcode-cn.com/problems/all-oone-data-structure/
+online_name: 全 O(1) 的数据结构
+level: h
+---
+
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+    {children}
+  </span>
+);
+
+:::tip LeetCode 提示
+
+题目难度 <Highlight color="#ff375f">困难</Highlight>
+
+原题链接 [🔗 leetcode](https://leetcode-cn.com/problems/all-oone-data-structure/)
+
+:::
+
+## 题解1
+
+双链表 + 哈希表 可以快速定位+快速更新相对位置。
+
+```java
+class AllOne {
+
+    class DuoLinkedNode {
+        public String key;
+        public int val;
+        public DuoLinkedNode next;
+        public DuoLinkedNode prev;
+
+        public DuoLinkedNode(String key, int val) {
+            this.key = key;
+            this.val = val;
+        }
+
+        public DuoLinkedNode() {
+            this.val = Integer.MAX_VALUE;
+            this.prev = this;
+            this.next = this;
+        }
+    }
+
+    private DuoLinkedNode head;
+    private Map<String, DuoLinkedNode> map;
+
+    private void insertNode(DuoLinkedNode cur, DuoLinkedNode newNode) {
+        DuoLinkedNode next = cur.next;
+        cur.next = newNode;
+        newNode.prev = cur;
+        newNode.next = next;
+        next.prev = newNode;
+    }
+
+    private void deleteNode(DuoLinkedNode theNode) {
+        DuoLinkedNode prev = theNode.prev, next = theNode.next;
+        prev.next = next;
+        next.prev = prev;
+    }
+
+    public AllOne() {
+        this.head = new DuoLinkedNode();
+        this.map = new HashMap();
+    }
+    
+    public void inc(String key) {
+        if (!this.map.containsKey(key)) {
+            DuoLinkedNode newNode = new DuoLinkedNode(key, 1);
+            DuoLinkedNode prev = this.head.prev;
+            insertNode(prev, newNode);
+            this.map.put(key, newNode);
+        } else {
+            DuoLinkedNode theNode = this.map.get(key);
+            theNode.val += 1;
+            if (theNode.val <= theNode.prev.val) {
+                return;
+            }
+            DuoLinkedNode cur = theNode.prev;
+            cur.next = theNode.next;
+            theNode.next.prev = cur;
+            while (cur.val < theNode.val) {
+                cur = cur.prev;
+            }
+            deleteNode(theNode);
+            insertNode(cur, theNode);
+        }
+    }
+    
+    public void dec(String key) {
+        DuoLinkedNode theNode = this.map.get(key);
+        theNode.val -= 1;
+
+        if (theNode.val == 0) {
+            deleteNode(theNode);
+            this.map.remove(key);
+            return;
+        }
+        
+        if (theNode.val >= theNode.next.val || theNode.next == this.head) {
+            return;
+        }
+
+        DuoLinkedNode cur = theNode.next;
+        while (cur.val > theNode.val && cur.next != this.head) {
+            cur = cur.next;
+        }
+        deleteNode(theNode);
+        insertNode(cur, theNode);
+    }
+    
+    public String getMaxKey() {
+        if (this.head.next == this.head) {
+            return "";
+        }
+        return this.head.next.key;
+    }
+    
+    public String getMinKey() {
+        if (this.head.prev == this.head) {
+            return "";
+        }
+        return this.head.prev.key;
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
+```
